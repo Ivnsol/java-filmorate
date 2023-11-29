@@ -36,7 +36,7 @@ public class FilmController {
         if (!films.containsKey(film.getId())) {
             throw new IllegalStateException("Не верный id");
         }
-        films.put(film.getId(),film);
+        films.put(film.getId(), film);
         log.info("Фильм {} обновлен", film);
         return film;
     }
