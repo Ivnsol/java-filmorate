@@ -14,7 +14,7 @@ import java.util.Set;
 
 import static org.junit.Assert.*;
 
-public class FilmAddTest{
+public class FilmAddTest {
 
     private Validator validator;
 
