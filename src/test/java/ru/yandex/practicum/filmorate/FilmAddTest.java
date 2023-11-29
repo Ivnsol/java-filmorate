@@ -46,7 +46,7 @@ public class FilmAddTest {
 
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         assertEquals(1,violations.size());
-    } 
+    }
 
     @Test
     public void addExtremeDurationFilmsTest() {
