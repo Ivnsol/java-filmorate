@@ -12,7 +12,8 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Validated
-public @Data class Film {
+@Data
+public class Film {
     private int id;
     @NotNull
     @NotBlank

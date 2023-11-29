@@ -23,7 +23,7 @@ public class FilmController {
     }
 
     @PostMapping
-    public Film addFilm(@Valid @RequestBody Film film){ //add film
+    public Film addFilm(@Valid @RequestBody Film film) { //add film
         film.setId(id);
         id++;
         log.info("Фильм {} добавлен", film);

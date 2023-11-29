@@ -10,7 +10,8 @@ import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 
 @Validated
-public @Data class User {
+@Data
+public class User {
     private int id;
     @Email
     private String email;
@@ -24,9 +25,11 @@ public @Data class User {
     public User(String email, String login, String name, LocalDate birthday) {
         this.email = email;
         this.login = login;
-        if (name == null){
+        if (name == null) {
             this.name = login;
-        } else { this.name = name; }
+        } else {
+            this.name = name;
+        }
         this.birthday = birthday;
     }
 
