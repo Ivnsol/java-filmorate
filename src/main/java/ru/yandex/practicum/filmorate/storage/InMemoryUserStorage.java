@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Slf4j
 @Component
 public class InMemoryUserStorage implements UserStorage {
     private final Map<Integer, User> users = new ConcurrentHashMap<>();
@@ -27,9 +26,7 @@ public class InMemoryUserStorage implements UserStorage {
     public User addUser(User user) {
         user.setId(id);
         id++;
-
         users.put(user.getId(), defaultUserName(user));
-        log.info("Пользователь {} добавлен", user);
         return user;
     }
 
@@ -39,7 +36,6 @@ public class InMemoryUserStorage implements UserStorage {
             throw new IllegalStateException("Не верный id");
         }
         users.put(user.getId(), defaultUserName(user));
-        log.info("Пользователь {} обновлен", user);
         return user;
     }
 

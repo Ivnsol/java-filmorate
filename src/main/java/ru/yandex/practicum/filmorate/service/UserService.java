@@ -26,10 +26,12 @@ public class UserService {
     }
 
     public User addUser(User user) {
+        log.info("Пользователь {} добавлен", user);
         return inMemoryUserStorage.addUser(user);
     }
 
     public User updateUser(User user) {
+        log.info("Пользователь {} обновлен", user);
         return inMemoryUserStorage.updateUser(user);
     }
 
@@ -89,8 +91,6 @@ public class UserService {
 
         user2.addFriend(idUser);
         user1.addFriend(newFriendToUserId);
-        log.info(user1 + "дружит  с "
-                + user2);
     }
 
     public void deleteFriend(int idUser,

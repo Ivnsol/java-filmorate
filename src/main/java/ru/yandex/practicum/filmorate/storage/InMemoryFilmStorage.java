@@ -8,11 +8,12 @@ import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/films")
-@Slf4j
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
     private final Map<Integer, Film> films = new ConcurrentHashMap<>();
@@ -33,7 +34,6 @@ public class InMemoryFilmStorage implements FilmStorage {
     public Film addFilm(Film film) { //add film
         film.setId(id);
         id++;
-        log.info("Фильм {} добавлен", film);
         films.put(film.getId(), film);
         return film;
     }
@@ -44,7 +44,6 @@ public class InMemoryFilmStorage implements FilmStorage {
             throw new IllegalStateException("Не верный id");
         }
         films.put(film.getId(), film);
-        log.info("Фильм {} обновлен", film);
         return film;
     }
 
@@ -56,6 +55,18 @@ public class InMemoryFilmStorage implements FilmStorage {
         } else {
             throw new IllegalStateException("не верное значение");
         }
+    }
+
+    public Collection<Film> getTopFilms(int count) {
+        return getFilms().stream()
+                .filter(Objects::nonNull)
+                .sorted((o1, o2) -> {
+                    int amountOfLikes1 = o1.getUserWhoLikeIds().size();
+                    int amountOfLikes2 = o2.getUserWhoLikeIds().size();
+                    return Integer.compare(amountOfLikes2, amountOfLikes1);
+                })
+                .limit(count)
+                .collect(Collectors.toList());
     }
 
 }

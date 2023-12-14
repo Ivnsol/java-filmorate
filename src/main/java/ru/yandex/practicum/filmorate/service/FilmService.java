@@ -1,14 +1,15 @@
 package ru.yandex.practicum.filmorate.service;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collection;
 
 @Service
+@Slf4j
 @AllArgsConstructor
 public class FilmService {
     private final InMemoryFilmStorage inMemoryFilmStorage;
@@ -25,16 +26,8 @@ public class FilmService {
     }
 
     public Collection<Film> getTopFilms(int count) {
-        return inMemoryFilmStorage.getFilms().stream()
-                .filter(Objects::nonNull)
-                .sorted((o1, o2) -> {
-                    int amountOfLikes1 = o1.getUserWhoLikeIds().size();
-                    int amountOfLikes2 = o2.getUserWhoLikeIds().size();
-                    return Integer.compare(amountOfLikes2, amountOfLikes1);
-                })
-                .limit(count)
-                .collect(Collectors.toList());
-}
+        return inMemoryFilmStorage.getTopFilms(count);
+    }
 
 
     public Collection<Film> getFilms() {
@@ -46,10 +39,12 @@ public class FilmService {
     }
 
     public Film addFilm(Film film) { //add film
+        log.info("Фильм {} добавлен", film);
         return inMemoryFilmStorage.addFilm(film);
     }
 
     public Film updateFilm(Film film) { //update film
+        log.info("Фильм {} обновлен", film);
         return inMemoryFilmStorage.updateFilm(film);
     }
 
