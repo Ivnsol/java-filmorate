@@ -1,5 +1,4 @@
-package ru.yandex.practicum.filmorate.controller.validations.dataCheck.after1985;
-
+package ru.yandex.practicum.filmorate.validator;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -8,7 +7,6 @@ import java.time.LocalDate;
 public class DateValidatorAfterFirstDate implements ConstraintValidator<AfterFirstDateValidator, LocalDate> {
     @Override
     public void initialize(AfterFirstDateValidator constraintAnnotation) {
-        // Ничего не требуется инициализировать
     }
 
     @Override
