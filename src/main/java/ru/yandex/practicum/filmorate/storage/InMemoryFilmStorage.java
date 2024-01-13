@@ -1,28 +1,26 @@
 package ru.yandex.practicum.filmorate.storage;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.yandex.practicum.filmorate.dao.FilmStorage;
 import ru.yandex.practicum.filmorate.model.Film;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/films")
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
     private final Map<Integer, Film> films = new ConcurrentHashMap<>();
     private int id = 1;
 
+    @Override
     public Collection<Film> getFilms() { //get all films
         return films.values();
     }
 
+    @Override
     public Film getFilmById(int id) {
         if (!films.containsKey(id)) {
             throw new IllegalArgumentException("Не верный id фильма");
@@ -67,6 +65,26 @@ public class InMemoryFilmStorage implements FilmStorage {
                 })
                 .limit(count)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Film.GenreWrapper getGenreById(int id) {
+        return null;
+    }
+
+    @Override
+    public List<Film.GenreWrapper> getGenre() {
+        return null;
+    }
+
+    @Override
+    public List<Film.MpaWrapper> getMpa() {
+        return null;
+    }
+
+    @Override
+    public Film.MpaWrapper getMpaById(int id) {
+        return null;
     }
 
 }

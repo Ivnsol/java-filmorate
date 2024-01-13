@@ -2,9 +2,10 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.dao.UserStorage;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -15,36 +16,37 @@ import java.util.stream.Collectors;
 @Slf4j
 public class UserService {
 
-    private final InMemoryUserStorage inMemoryUserStorage;
+    @Qualifier("userStorageImpl")
+    private final UserStorage userStorage;
 
     public Collection<User> getUsers() {
-        return inMemoryUserStorage.getUsers();
+        return userStorage.getUsers();
     }
 
     public User getUserById(int id) {
-        return inMemoryUserStorage.getUserById(id);
+        return userStorage.getUserById(id);
     }
 
     public User addUser(User user) {
         log.info("Пользователь {} добавлен", user);
-        return inMemoryUserStorage.addUser(user);
+        return userStorage.addUser(user);
     }
 
     public User updateUser(User user) {
         log.info("Пользователь {} обновлен", user);
-        return inMemoryUserStorage.updateUser(user);
+        return userStorage.updateUser(user);
     }
 
     public void deleteUser(int id) {
-        inMemoryUserStorage.deleteUser(id);
+        userStorage.deleteUser(id);
     }
 
     public LinkedHashSet<User> getUserFriends(int id) {
-        User user = inMemoryUserStorage.getUserById(id);
+        User user = userStorage.getUserById(id);
         Set<Integer> usersId = user.getFriends();
         Set<User> commonFriends = new HashSet<>();
         for (Integer integer : usersId) {
-            User users = inMemoryUserStorage.getUserById(integer);
+            User users = userStorage.getUserById(integer);
             commonFriends.add(users);
         }
         return commonFriends.stream()
@@ -56,8 +58,8 @@ public class UserService {
     public Set<User> getCommonFriends(int userId,
                                       int userCommonFriendId) {
         List<Integer> numbers = new ArrayList<>();
-        numbers.addAll(inMemoryUserStorage.getUserById(userId).getFriends());
-        numbers.addAll(inMemoryUserStorage.getUserById(userCommonFriendId).getFriends());
+        numbers.addAll(userStorage.getUserById(userId).getFriends());
+        numbers.addAll(userStorage.getUserById(userCommonFriendId).getFriends());
 
         if (!numbers.isEmpty()) {
             Map<Integer, Long> map = numbers
@@ -74,7 +76,7 @@ public class UserService {
                     .collect(Collectors.toSet());
             Set<User> commonFriends = new HashSet<>();
             for (Integer integer : id) {
-                User user = inMemoryUserStorage.getUserById(integer);
+                User user = userStorage.getUserById(integer);
                 commonFriends.add(user);
             }
             return commonFriends;
@@ -86,20 +88,22 @@ public class UserService {
     public void addFriend(int idUser,
                           int newFriendToUserId) {
 
-        User user1 = inMemoryUserStorage.getUserById(idUser);
-        User user2 = inMemoryUserStorage.getUserById(newFriendToUserId);
+        User user1 = userStorage.getUserById(idUser);
+        User user2 = userStorage.getUserById(newFriendToUserId);
 
-        user2.addFriend(idUser);
-        user1.addFriend(newFriendToUserId);
+      //  user2.addFriend(idUser);
+        user1.addFriendToUser(newFriendToUserId);
+        user1.setFriendStatus(newFriendToUserId, "Запрос отправлен");
+
+        updateUser(user1);
     }
 
     public void deleteFriend(int idUser,
                              int removingFriendId) {
 
-        User user1 = inMemoryUserStorage.getUserById(idUser);
+        User user1 = userStorage.getUserById(idUser);
         user1.deleteFriend(removingFriendId);
 
-        User user2 = inMemoryUserStorage.getUserById(removingFriendId);
-        user2.deleteFriend(idUser);
+        updateUser(user1);
     }
 }
