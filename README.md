@@ -7,43 +7,57 @@ Template repository for Filmorate project.
 
 Film_id - айдишник фильма
 
-Name- название 
+Name - название 
 
-Description -описание
+Description - описание
 
 Release_date - дата выхода
 
 Duration - продолжительность
 
-MPA_id - id возрастного ограничения и ссылку на таблицу Motion_picture_association
+mpa - id возрастного ограничения и ссылку на таблицу Motion_picture_association
 
-Genre_id - id жанра фильма отсылка к таблице Genre
+Genre_id - id жанра фильма отсылка к таблице Film_Genre
 
-Таблица Motion_picture_association содержит:
+### Таблица Motion_picture_association содержит:
 
-id - айди
+film_id - айди фильма
+
+mpa_id - айди возрастного ограничения
+
+### Таблица Motion_picture_association содержит:
+
+mpa_id - айди возрастного ограничения
 
 MPA_title - наименование возрастного ограничения
 
+### Таблица Film_Genre:
+
+Genre_id - айдишник наименования заголовка жанра ссылка на таблицу Genre
+
+Film_id - айдишник фильма
+
 ### Таблица Genre:
+
 Genre_id - айдишник наименования заголовка жанра
 
 Title - наименование загловка
 
-### Таблица Likes (связывающая с юзером)
+### Таблица Likes 
 
 Film_id - айди фильма (дает отсылку к таблице Film)
 
-User_id - айди юзера (дает отсылку к таблице User)
+User_id - айди юзера поставивший лайк фильму
 
 ### Таблица User
-User_id - айди юзера
 
-Email - почта
+User_id - айди юзера
 
 Login - логин
 
 Name - имя
+
+Email - почта
 
 Birthday - дата рождения
 
@@ -53,4 +67,4 @@ User_ID - айди юзера
 
 Users_ID - айди друзей юзера
 
-Friends_status - статус друга по связке User_ID-Users_ID
+status - статус друга по связке User_ID-Users_ID
