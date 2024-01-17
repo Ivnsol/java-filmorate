@@ -25,8 +25,7 @@ public class User {
     private String name;
     @PastOrPresent
     private LocalDate birthday;
-    private Set<Integer> friends;
-    private Map<Integer,String> friendStatus;
+    private Map<Integer, String> friendStatus;
 
     public User(String email, String login, String name, LocalDate birthday) {
         this.email = email;
@@ -38,17 +37,10 @@ public class User {
             this.name = name;
         }
         this.birthday = birthday;
-        this.friends = new HashSet<>();
         this.friendStatus = new HashMap<>();
     }
 
-    public void addFriendToUser(int id) {
-        friends.add(id);
-
-    }
-
     public void deleteFriend(int id) {
-        friends.remove(id);
         friendStatus.remove(id);
     }
 

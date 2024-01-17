@@ -6,23 +6,23 @@ import java.util.Collection;
 import java.util.List;
 
 public interface FilmStorage {
-    Film updateFilm(Film film);
+    Film update(Film film);
 
-    Film addFilm(Film film);
+    Film add(Film film);
 
-    void deleteFilm(int id);
+    void delete(int id);
 
-    Film getFilmById(int id);
+    Film getById(int id);
 
-    Collection<Film> getFilms();
+    Collection<Film> get();
 
-    Collection<Film> getTopFilms(int count);
+    Collection<Film> getTop(int count);
 
-    Film.GenreWrapper getGenreById(int id);
+    Film.GenreWrapper genreById(int id);
 
-    List<Film.GenreWrapper> getGenre();
+    List<Film.GenreWrapper> genre();
 
-    List<Film.MpaWrapper> getMpa();
+    List<Film.MpaWrapper> mpa();
 
-    Film.MpaWrapper getMpaById(int id);
+    Film.MpaWrapper mpaById(int id);
 }

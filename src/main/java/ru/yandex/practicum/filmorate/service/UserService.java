@@ -20,36 +20,41 @@ public class UserService {
     private final UserStorage userStorage;
 
     public Collection<User> getUsers() {
-        return userStorage.getUsers();
+        return userStorage.get();
     }
 
     public User getUserById(int id) {
-        return userStorage.getUserById(id);
+        return userStorage.getById(id);
     }
 
     public User addUser(User user) {
         log.info("Пользователь {} добавлен", user);
-        return userStorage.addUser(user);
+        return userStorage.add(user);
     }
 
     public User updateUser(User user) {
         log.info("Пользователь {} обновлен", user);
-        return userStorage.updateUser(user);
+        return userStorage.update(user);
     }
 
     public void deleteUser(int id) {
-        userStorage.deleteUser(id);
+        userStorage.delete(id);
     }
 
     public LinkedHashSet<User> getUserFriends(int id) {
-        User user = userStorage.getUserById(id);
-        Set<Integer> usersId = user.getFriends();
-        Set<User> commonFriends = new HashSet<>();
+        User user = userStorage.getById(id);
+
+        Set<Integer> usersId = user.getFriendStatus().keySet();
+        Set<User> friends = new HashSet<>();
+
         for (Integer integer : usersId) {
-            User users = userStorage.getUserById(integer);
-            commonFriends.add(users);
+            User userFriend = userStorage.getById(integer);
+            if (userFriend != null) {
+                friends.add(userFriend);
+            }
         }
-        return commonFriends.stream()
+
+        return friends.stream()
                 .sorted(Comparator.comparing(User::getId))
                 .collect(Collectors.toCollection(LinkedHashSet::new));
     }
@@ -58,8 +63,11 @@ public class UserService {
     public Set<User> getCommonFriends(int userId,
                                       int userCommonFriendId) {
         List<Integer> numbers = new ArrayList<>();
-        numbers.addAll(userStorage.getUserById(userId).getFriends());
-        numbers.addAll(userStorage.getUserById(userCommonFriendId).getFriends());
+        Set<Integer> i = userStorage.getById(userId).getFriendStatus().keySet();
+        Set<Integer> j = userStorage.getById(userCommonFriendId).getFriendStatus().keySet();
+
+        numbers.addAll(i);
+        numbers.addAll(j);
 
         if (!numbers.isEmpty()) {
             Map<Integer, Long> map = numbers
@@ -74,12 +82,7 @@ public class UserService {
                     .filter(e -> e.getValue() > 1)
                     .map(Map.Entry::getKey)
                     .collect(Collectors.toSet());
-            Set<User> commonFriends = new HashSet<>();
-            for (Integer integer : id) {
-                User user = userStorage.getUserById(integer);
-                commonFriends.add(user);
-            }
-            return commonFriends;
+            return userStorage.getCommonFriends(id);
         } else {
             return new HashSet<>();
         }
@@ -88,20 +91,19 @@ public class UserService {
     public void addFriend(int idUser,
                           int newFriendToUserId) {
 
-        User user1 = userStorage.getUserById(idUser);
-        User user2 = userStorage.getUserById(newFriendToUserId);
+        User user = userStorage.getById(idUser);
+        User userCheck = userStorage.getById(newFriendToUserId);
 
-      //  user2.addFriend(idUser);
-        user1.addFriendToUser(newFriendToUserId);
-        user1.setFriendStatus(newFriendToUserId, "Запрос отправлен");
+        user.setFriendStatus(newFriendToUserId, "Запрос отправлен");
 
-        updateUser(user1);
+        updateUser(user);
     }
+
 
     public void deleteFriend(int idUser,
                              int removingFriendId) {
 
-        User user1 = userStorage.getUserById(idUser);
+        User user1 = userStorage.getById(idUser);
         user1.deleteFriend(removingFriendId);
 
         updateUser(user1);

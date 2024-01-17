@@ -4,15 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import ru.yandex.practicum.filmorate.dao.FilmStorage;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -24,57 +19,57 @@ public class FilmService {
     private final FilmStorage filmStorage;
 
     public List<Film.MpaWrapper> getMpa() {
-        return filmStorage.getMpa();
+        return filmStorage.mpa();
     }
 
     public Film.MpaWrapper getMpaById(int id) {
-        return filmStorage.getMpaById(id);
+        return filmStorage.mpaById(id);
     }
 
     public List<Film.GenreWrapper> getGenre() {
-        return filmStorage.getGenre();
+        return filmStorage.genre();
     }
 
     public Film.GenreWrapper getGenreById(int id) {
-        return filmStorage.getGenreById(id);
+        return filmStorage.genreById(id);
     }
 
     public void addLikeToFilm(int filmId, int userId) {
-        Film film = filmStorage.getFilmById(filmId);
-        film.setLikes(userId);
+        Film film = filmStorage.getById(filmId);
+        film.setLikeToFilm(userId);
         updateFilm(film);
     }
 
     public void removeLikeFromFilm(int filmId, int userId) {
-        Film film = filmStorage.getFilmById(filmId);
+        Film film = filmStorage.getById(filmId);
         film.deleteLike(userId);
         updateFilm(film);
     }
 
     public Collection<Film> getTopFilms(int count) {
-        return filmStorage.getTopFilms(count);
+        return filmStorage.getTop(count);
     }
 
 
     public Collection<Film> getFilms() {
-        return filmStorage.getFilms();
+        return filmStorage.get();
     }
 
     public Film getFilmById(int id) {
-        return filmStorage.getFilmById(id);
+        return filmStorage.getById(id);
     }
 
     public Film addFilm(Film film) { //add film
         log.info("Фильм {} добавлен", film);
-        return filmStorage.addFilm(film);
+        return filmStorage.add(film);
     }
 
     public Film updateFilm(Film film) { //update film
         log.info("Фильм {} обновлен", film);
-        return filmStorage.updateFilm(film);
+        return filmStorage.update(film);
     }
 
     public void deleteFilm(int id) {
-        filmStorage.deleteFilm(id);
+        filmStorage.delete(id);
     }
 }

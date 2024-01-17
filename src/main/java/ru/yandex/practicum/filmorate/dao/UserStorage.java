@@ -3,17 +3,19 @@ package ru.yandex.practicum.filmorate.dao;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.Collection;
+import java.util.Set;
 
 public interface UserStorage {
 
-    public User updateUser(User user);
+    public User update(User user);
 
-    public User addUser(User user);
+    public User add(User user);
 
-    public void deleteUser(int id);
+    public void delete(int id);
 
-    User getUserById(int id);
+    User getById(int id);
 
-    Collection<User> getUsers();
+    Collection<User> get();
 
+    Set<User> getCommonFriends(Set<Integer> id);
 }

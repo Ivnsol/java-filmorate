@@ -27,7 +27,7 @@ public class Film {
     private final LocalDate releaseDate;
     @Positive
     private final int duration;
-    private Set<Integer> userWhoLikeIds; //Likes_amount
+    private Set<Integer> userWhoLikeIds;
     @JsonProperty("mpa")
     private MpaWrapper mpa;
     @JsonProperty("genres")
@@ -49,8 +49,11 @@ public class Film {
         genres.add(genre);
     }
 
-    public void setLikes(int userId) {
-        userWhoLikeIds.add(userId);
+    public void setLikeToFilm(int id) {
+        userWhoLikeIds.add(id);
+    }
+    public void setLikes(Set<Integer> usersId) {
+        userWhoLikeIds.addAll(usersId);
     }
 
     public void deleteLike(int userId) {
@@ -58,18 +61,6 @@ public class Film {
             throw new IllegalArgumentException("Не верный id user");
         }
         userWhoLikeIds.remove(userId);
-    }
-
-    @Override
-    public String toString() {
-        return "Film{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", releaseDate=" + releaseDate +
-                ", duration=" + duration +
-                ", userWhoLikeIds=" + userWhoLikeIds +
-                '}';
     }
 
     @Data
