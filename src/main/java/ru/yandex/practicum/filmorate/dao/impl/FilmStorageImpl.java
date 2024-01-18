@@ -183,7 +183,7 @@ public class FilmStorageImpl implements FilmStorage {
                 "select film_id " +
                 "from likes " +
                 "group by film_id " +
-                "order by sum(user_id) desc " +
+                "order by count(user_id) desc " +
                 "limit ?)";
         SqlRowSet filmRows = jdbcTemplate.queryForRowSet(sql, count);
         while (filmRows.next()) {
@@ -210,7 +210,9 @@ public class FilmStorageImpl implements FilmStorage {
         String insertLikesSql = "insert into likes(film_id, user_id) values (?, ?)";
         if (!film.getUserWhoLikeIds().isEmpty()) {
             for (Integer userWhoLikeId : film.getUserWhoLikeIds()) {
-                jdbcTemplate.update(insertLikesSql, film.getId(), userWhoLikeId);
+                if (userWhoLikeId > 0) {
+                    jdbcTemplate.update(insertLikesSql, film.getId(), userWhoLikeId);
+                }
             }
         } else {
             jdbcTemplate.update(insertLikesSql, film.getId(), null);
@@ -315,7 +317,9 @@ public class FilmStorageImpl implements FilmStorage {
         if (selectFilmGenre().get(film.getId()) != null) {
             film.setGenres(selectFilmGenre().get(film.getId()));
         }
-        film.setLikes(selectFilmLikes().get(film.getId()));
+        if (!selectFilmLikes().get(film.getId()).isEmpty()) {
+            film.setLikes(selectFilmLikes().get(film.getId())); //TODO понять в чем ошибка
+        }
         film.setMpa(selectFilmMpa().get(film.getId()));
     }
 }

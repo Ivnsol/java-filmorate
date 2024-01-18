@@ -52,8 +52,9 @@ CREATE TABLE IF NOT EXISTS friends (
 
 CREATE TABLE IF NOT EXISTS likes (
     film_id integer,
-    user_id integer NULL,
+    user_id integer,
     FOREIGN KEY (film_id) REFERENCES film (film_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
     UNIQUE(film_id,user_id)
     );
 
