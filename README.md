@@ -1,5 +1,8 @@
 # java-filmorate
-Template repository for Filmorate project.
+
+### The application tracks the popularity of movies. Added users like the films they created, thereby raising them in the rankings.
+
+The application was written using Spring Boot, including the REST protocol. The data is stored in a database. Next, the designed database schema will be described in detail.
 
 ![Data Base Diagram](https://github.com/Ivnsol/java-filmorate/blob/main/DB%20Diagram.jpg
 
