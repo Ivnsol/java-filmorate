@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.model;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.validation.annotation.Validated;
@@ -10,12 +11,13 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Validated
 @Data
 public class Film {
+    private int id;
     @NotNull
     @NotBlank
     private final String name;
@@ -25,8 +27,11 @@ public class Film {
     private final LocalDate releaseDate;
     @Positive
     private final int duration;
-    private int id;
     private Set<Integer> userWhoLikeIds;
+    @JsonProperty("mpa")
+    private MpaWrapper mpa;
+    @JsonProperty("genres")
+    private Set<GenreWrapper> genres = new HashSet<>();
 
     public Film(String name, String description, LocalDate releaseDate, int duration) {
         this.name = name;
@@ -36,8 +41,19 @@ public class Film {
         this.userWhoLikeIds = new HashSet<>();
     }
 
-    public void setLikes(int userId) {
-        userWhoLikeIds.add(userId);
+    public void setMpa(MpaWrapper mpa) {
+        this.mpa = mpa;
+    }
+
+    public void setGenre(GenreWrapper genre) {
+        genres.add(genre);
+    }
+
+    public void setLikeToFilm(int id) {
+        userWhoLikeIds.add(id);
+    }
+    public void setLikes(Set<Integer> usersId) {
+        userWhoLikeIds.addAll(usersId);
     }
 
     public void deleteLike(int userId) {
@@ -47,16 +63,15 @@ public class Film {
         userWhoLikeIds.remove(userId);
     }
 
-    @Override
-    public String toString() {
-        return "Film{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", releaseDate=" + releaseDate +
-                ", duration=" + duration +
-                ", userWhoLikeIds=" + userWhoLikeIds +
-                '}';
+    @Data
+    public static class MpaWrapper {
+        private int id;
+        private String name;
     }
 
+    @Data
+    public static class GenreWrapper {
+        private int id;
+        private String name;
+    }
 }
